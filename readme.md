@@ -26,7 +26,7 @@ El proyecto se encuentra realizado en node.js
 ```shell
     node index.js
 ```
-# POSTAM #
+# POSTMAN #
 
 Con Postam se podrán realizar los siguientes EndPoints (También lo puedes consultar en Swagger):
 
