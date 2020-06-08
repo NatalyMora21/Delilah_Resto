@@ -1,0 +1,353 @@
+swagger: "2.0"
+
+info:
+  description: "Primera API Proyecto Delilah Restó "
+  version: 1.0.0
+  title: Delilah Restó
+  contact:
+    email: tatamora21@gmail.com
+    
+paths:
+  /registro:
+
+    post:
+      tags: 
+        - "usuario"
+      summary: "Agrega un nuevo usuario"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Objeto de usuario que se agrega a la aplicacion"
+        required: true
+        schema:
+          $ref: "#/definitions/usuario"
+      responses:
+        "201":
+          description: "Operación exitosa"
+
+          
+  /login:
+    post:
+      tags:
+      - "usuario"
+      summary: "Iniciar sesión en el sistema"
+      description: ""
+      operationId: "loginUser"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "usuario"
+        in: "query"
+        description: "Usuario para ingresar"
+        required: true
+        type: "string"
+      - name: "contrasena"
+        in: "query"
+        description: "Contraseña para ingresar"
+        required: true
+        type: "string"
+      responses:
+        "200":
+          description: "Usuario logueado"
+        "401":
+          description: "Usuario o contraseña errados"
+  /usuarios:
+      get:
+        tags:
+          - "usuario"
+        summary: "Obtener la lista de los productos"
+        description: "Si el usuario tiene rol administrador podrá visualizar todos lo usuarios, si no, sólo visualizará su información"
+        operationId: "getUsuarios"
+        responses:
+          "200":
+            description: "Operación exitosa"
+        parameters:
+        - name: "token"
+          in: "header"
+          required: true
+          type: "string"
+          
+  /productos:
+  
+      post:
+        tags:
+          - "producto"
+        summary: "Agregar un nuevo producto"
+        description: "Esto solo lo puede hacer un usuario logueado y con rol administrador"
+        parameters: 
+        - in: "header"
+          name: "token"
+          required: true
+          type: "string"
+        - in: "body"
+          name: "body"
+          description: "Objeto de producto que se agrega a la aplicacion"
+          
+          required: true
+          schema:
+            $ref: "#/definitions/producto"
+        responses:
+          "201":
+           description: "Producto registrado con éxito"
+           
+      get:
+        tags:
+          - "producto"
+        summary: "Obtener la lista de los productos"
+        description: "Esto sólo lo puede visualizar los usuarios logueados"
+        operationId: "getProductos"
+        responses:
+          "200":
+            description: "Operación exitosa"
+          "204":
+            description: "No hay productos disponibles"
+        parameters:
+        - name: "token"
+          in: "header"
+          required: true
+          type: "string"
+            
+
+           
+  /productos/{id}:
+      put:
+        tags:
+        - "producto"
+        summary: "Actualizar producto"
+        description: "Esto solo lo puede hacer un usuario logueado y con rol administrador"
+        operationId: "updateUser"
+        produces:
+        - "application/xml"
+        - "application/json"
+        parameters:
+        - in: "header"
+          name: "token"
+          required: true
+          type: "string"
+        - name: "id"
+          in: "path"
+          description: "name that need to be updated"
+          required: true
+          type: "string"
+        - in: "body"
+          name: "body"
+          description: "Updated user object"
+          required: true
+          schema:
+            $ref: "#/definitions/producto"
+        responses:
+          "200":
+            description: "Se ha actualizado con éxito el producto"
+          "204":
+            description: "Producto no encontrado"
+          
+      delete:
+        tags:
+        - "producto"
+        summary: "Eliminar un producto"
+        description: "Esto solo lo puede hacer un usuario logueado y con rol administrador"
+        produces:
+        - "application/xml"
+        - "application/json"
+        parameters:
+        - name: "token"
+          in: "header"
+          required: true
+          type: "string"
+        - name: "id"
+          in: "path"
+          description: "Id del producto a eliminar"
+          required: true
+          type: "integer"
+          format: "int64"
+        responses:
+          "200":
+            description: "El producto se ha eliminado con éxito"
+          "204":
+            description: "Producto no encontrado"
+          
+
+  /pedidos:
+
+    post:
+      tags:
+        - "pedido"
+      summary: "Agregar un nuevo pedido" 
+      description: "Usuarios logueados pueden agregar pedidos, no se solicita ningún campo ya que se asocia automaticamente al usuario logueado y con el estado pendiente"
+      parameters:
+      - name: "token"
+        in: "header"
+        required: true
+        type: "string"
+  
+      responses:
+        "201":
+         description: "Nuevo pedido agregado"
+         
+    get:
+      tags:
+        - "pedido"
+      summary: "Obtener la lista de los pedidos"
+      description: "Esto sólo lo puede visualizar los usuarios logueados,  si el rol es administrador puede ver los pedidos, si es cliente solo los propios."
+      parameters:
+        - name: "token"
+          in: "header"
+          required: true
+          type: "string"
+      responses:
+        200:
+          description: OK
+
+
+          
+  /pedidos/{id}/{estado}:
+    patch:
+      tags:
+      - "pedido"
+      summary: "Actualizar el estado de un pedido"
+      description: "Solo los usuarios con rol administrador pueden cambia el estado del pedido: pedidos/1?estado=1"
+      produces:
+      - "application/xml"
+      - "application/json"
+
+      parameters:
+      - name: "token"
+        in: "header"
+        required: true
+        type: "string"
+      - name: "id"
+        in: "path"
+        description: "Número del pedido"
+        required: true
+        type: "integer"
+      - in: "path"
+        name: "estado"
+        description: "Estado del pedido, es un parametro de ruta"
+        required: true
+        type: "integer"
+      responses:
+        "200":
+          description: "Pedido actualizado"
+
+         
+  /pedidos/{id}/productos: 
+    post:
+      tags:
+        - "pedido"
+      summary: "Agregar un producto al pedido" 
+      description: "Usuarios logueados pueden agregar productos a un pedido que tengan asociado"
+      parameters:
+      - name: "token"
+        in: "header"
+        required: true
+        type: "string"
+      - name: "id"
+        in: "path"
+        description: "Número del pedido"
+        required: true
+        type: "string"
+      - in: "body"
+        name: "body"
+        description: "Objeto de pedido"
+        required: true
+        schema:
+          $ref: "#/definitions/pedido_productos"
+
+      responses:
+        "201":
+         description: "Producto agregado al pedido"
+        
+         
+  /pedidos/{id}:
+    delete:
+      tags:
+      - "pedido"
+      summary: "Eliminar un pedido"
+      description: "Esto solo lo puede hacer un usuario logueado y con rol administrador"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - name: "token"
+        in: "header"
+        required: true
+        type: "string"
+      - name: "id"
+        in: "path"
+        description: "Id del pedido a eliminar"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        "200":
+          description: "El pedido se ha eliminado con éxito"
+      
+
+    get:
+      tags:
+      - "pedido"
+      summary: "Consultar productos de un pedido"
+      description: "Si el rol es admin puede ver los productos de cualquier pedido, si es cliente solo los productos de sus pedidos"
+      parameters:
+      - name: "token"
+        in: "header"
+        required: true
+        type: "string"
+      - name: "id"
+        in: "path"
+        description: "Id del pedido a consultar"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        "200":
+          description: "El pedido se ha eliminado con éxito"
+    
+        
+definitions:
+  usuario:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+      nombre_apellido:
+        type: "string"
+      correo: 
+        type: "string"
+      telefono:
+        type: "string"
+      direccion:
+        type: "string"
+      contrasena:
+        type: "string"
+      rol_id:
+        type: "integer"
+  producto:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+      nombre: 
+        type: "string"
+      cantidad:
+        type: "integer"
+      precio:
+        type: "integer"
+      
+
+        
+  pedido_productos:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+      id_producto:
+        type: "integer"
+      cantidad:
+        type: "integer"
+  
+  
+        
+    
+  
+      
