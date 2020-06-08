@@ -14,8 +14,11 @@ El proyecto se encuentra realizado en node.js
 * multer: npm i multer
 * path: npm i path
 
+## Luego, crear la base de datos en Mysql Workbeanch, el arhivo se encuentra en: /db/scriptdb.sql:
 
-##  Ir a la conexión a la base de datos que se encuntra en /db/varibles e ingresar la información correspondiente.
+
+##  Para realizar la conexión a la base de datos debes llenar la información correspondiente que se encuntra en /db/varibles
+
 ![](/imagenes/Conexionbd.jpg)
 
 ## Para iniciar el proyecto debes correr el siguiente comando:
