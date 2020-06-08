@@ -26,8 +26,26 @@ El proyecto se encuentra realizado en node.js
 ```shell
     node index.js
 ```
+# POSTAM #
 
 Con Postam se podrán realizar los siguientes EndPoints (También lo puedes consultar en Swagger):
+
+Para las rutas donde el usuario necesita autenticación autorización, se debe pasar el token como se visualiza en la imagén.
+
+## Las rutas son ##
+
+* CRUD de productos
+* Consultar los usuarios GET /usuarios
+* Consultar todos los pedidos GET /pedidos
+* Agregar un pedido POST /pedidos
+* Agregar un producto al pedido POST  /pedidos/:id/productos
+* Ver todos los productos de un pedido GET /pedidos/:id
+* Actualizar el estado de un pedido PATCH /pedidos/:id
+* Eliminar el pedido DELETE /pedidos/:id
+
+
+![](/imagenes/postman.jpg)
+
 
 ## USUARIOS
 
